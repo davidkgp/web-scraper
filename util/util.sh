@@ -5,6 +5,19 @@ silentlog(){
     fi
 }
 
+hrefisAbsolute(){
+
+	local URL_href=$1
+	local URL=${URL_href##*=}
+	local protocol=${URL%%/*}
+
+	if [[ $protocol == *"http:"*  ||  $protocol == *"https:"* ]]; then
+		echo "yes"
+	fi
+
+
+}
+
 filterFileTypes(){
 
 	local URL=$1
@@ -39,4 +52,22 @@ checkLastCommadExecuteAndExit(){
        echo -e "\e[31m $1 \e[0m"
        exit 1
     fi
+}
+
+getDomainRoot(){
+	local URL=$1
+	local protocol=${URL%%/*}
+	local HALF=${URL#*//}
+	local domain=${HALF%%/*}
+	echo "$protocol//$domain"
+}
+
+getStringinBetweenDoubleQuotes(){
+	local value=$1
+	local delim=$2
+
+	local one=${value#*\"}
+	local final=${one%\"*}
+	echo $final
+
 }
