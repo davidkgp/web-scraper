@@ -71,3 +71,30 @@ getStringinBetweenDoubleQuotes(){
 	echo $final
 
 }
+
+alreadVisited(){
+	local url=$1
+
+	if [ ! -f "$WORKINGDIR/tmp/visited.txt" ]; then
+       echo "no2"
+    elif [[ -f "$WORKINGDIR/tmp/visited.txt" ]]; then
+    	if grep -q $url "$WORKINGDIR/tmp/visited.txt" ; then
+    		echo "yes"
+    	else
+    		echo "no1"
+    	fi
+    	 
+    fi
+}
+
+createVisited(){
+	if [[ ! -d "$WORKINGDIR/tmp" ]]; then
+		mkdir "$WORKINGDIR/tmp"
+		touch "$WORKINGDIR/tmp/visited.txt"
+	else
+		if [ ! -f "$WORKINGDIR/tmp/visited.txt" ]; then
+			touch "$WORKINGDIR/tmp/visited.txt"
+		fi
+	fi
+	
+}
