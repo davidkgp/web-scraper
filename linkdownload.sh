@@ -33,4 +33,6 @@ filterFileTypes $IMG_LINK
 checkLastCommadExecuteAndExit "Cannot download $IMG_LINK"
 
 $(curl -o "$DESTINATION_DIR/$FILE_NAME_SAVED" --max-filesize $MAX_FILE_SIZE_IN_BYTES $IMG_LINK) 
-checkLastCommadExecute "Download failed" #> "$DESTINATION_DIR/$FILE_NAME_SAVED"
+checkLastCommadExecuteAndExit "Download failed" #> "$DESTINATION_DIR/$FILE_NAME_SAVED"
+addToVisited $IMG_LINK
+sleep 5

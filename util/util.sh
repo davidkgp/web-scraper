@@ -76,12 +76,12 @@ alreadVisited(){
 	local url=$1
 
 	if [ ! -f "$WORKINGDIR/tmp/visited.txt" ]; then
-       echo "no2"
+       echo "no"
     elif [[ -f "$WORKINGDIR/tmp/visited.txt" ]]; then
     	if grep -q $url "$WORKINGDIR/tmp/visited.txt" ; then
     		echo "yes"
     	else
-    		echo "no1"
+    		echo "no"
     	fi
     	 
     fi
@@ -98,3 +98,28 @@ createVisited(){
 	fi
 	
 }
+
+createImgFolder(){
+	if [[ ! -d "$WORKINGDIR/img" ]]; then
+		mkdir "$WORKINGDIR/img"
+	fi
+	
+}
+
+addToVisited(){
+	createVisited
+	echo $1 >> "$WORKINGDIR/tmp/visited.txt"
+}
+
+isImgLink(){
+	local LINK=$1
+	local URL=$1
+	local val=$((${#URL}-1))
+	local last_char=${URL:$val:1}
+	# dont download if url ends with /
+	if [[ "$last_char" == '/' ]]; then
+		echo "no"
+	fi
+
+}
+

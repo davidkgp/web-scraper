@@ -6,7 +6,13 @@ source ./util/util.sh
 ROOTLINK=$1
 
 
+#echo $(alreadVisited $ROOTLINK)
+
 if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
+
+
+	addToVisited $ROOTLINK
+	createImgFolder
 	
 	DOMAIN_URL=$(getDomainRoot $ROOTLINK)
     silentlog "Domain Url :$DOMAIN_URL"
@@ -18,8 +24,22 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
     do
       silentlog "to be visited $link"
       if [[ $(hrefisAbsolute $link) == "yes" ]]; then
-  	    echo $link
-  	    linkdownload.sh $link
+      	 LINK=${link##*=}
+  	     LINK_WITHOUTQUOTES=$(getStringinBetweenDoubleQuotes $LINK)
+  	    echo $LINK_WITHOUTQUOTES
+
+        if [[ $(isImgLink $LINK_WITHOUTQUOTES) == "no" ]]; then
+        	(
+        		linkNavigateandFindImageLinks.sh $LINK_WITHOUTQUOTES
+        	)
+        else
+        	(
+        		linkdownload.sh $LINK_WITHOUTQUOTES --destination-dir="$WORKINGDIR/img"
+        	)
+        fi
+
+  	    
+  	     
   
       #elif [[ condition ]]; then
 
@@ -30,6 +50,18 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
   	     PART_LINK_WITHOUTQUOTES=$(getStringinBetweenDoubleQuotes $PART_LINK)
   	     FINAL_LINK=$DOMAIN_URL$PART_LINK_WITHOUTQUOTES
   	     echo $FINAL_LINK
+
+         if [[ $(isImgLink $FINAL_LINK) == "no" ]]; then
+        	(
+        		linkNavigateandFindImageLinks.sh $FINAL_LINK
+        	)
+         else
+         	(
+        	linkdownload.sh $FINAL_LINK --destination-dir="$WORKINGDIR/img"
+        	)
+         fi
+
+  	     
 
   	  	#echo "$DOMAIN_URL$FINAL_LINK"
       fi
