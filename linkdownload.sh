@@ -28,5 +28,9 @@ fi
 
 # get the name of the file after the last / in url
 FILE_NAME_SAVED=${IMG_LINK##*/}
+
+filterFileTypes $IMG_LINK
+checkLastCommadExecuteAndExit "Cannot download $IMG_LINK"
+
 $(curl -o "$DESTINATION_DIR/$FILE_NAME_SAVED" --max-filesize $MAX_FILE_SIZE_IN_BYTES $IMG_LINK) 
 checkLastCommadExecute "Download failed" #> "$DESTINATION_DIR/$FILE_NAME_SAVED"
