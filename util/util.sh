@@ -112,14 +112,37 @@ addToVisited(){
 }
 
 isImgLink(){
-	local LINK=$1
+	
 	local URL=$1
 	local val=$((${#URL}-1))
 	local last_char=${URL:$val:1}
 	# dont download if url ends with /
 	if [[ "$last_char" == '/' ]]; then
 		echo "no"
+	else
+		if [[ $IMG_FILE_TYPE != *"${URL##*/}"* ]]; then
+			echo "no"
+		elif [[ $IMG_FILE_TYPE != *"${URL##*.}"* ]]; then
+			echo "no"
+		fi
 	fi
+
+}
+
+
+isImgBelowMinimumLength(){
+  local URL=$1
+  local MIN=100000
+
+  local VAL=$(curl -sI $URL | grep -i "Content-Length")
+  local SIZE=${VAL//[!0-9]/}
+  local DECIDE=$(( SIZE < MIN ))
+
+  if [[ $DECIDE == 1 ]] ; then
+  	return 1
+  else 
+  	return 0
+  fi
 
 }
 

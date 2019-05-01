@@ -20,8 +20,10 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
     
 
 
-    curl $ROOTLINK 2>&1 | grep -o -E 'href="([^"#]+)"' | while read link
+    {(curl $ROOTLINK 2>&1 | grep -o -E 'href="([^"#]+)"') && (curl $ROOTLINK 2>&1 | grep -o -E "href='([^'#]+)'")} | while read hreflink
     do
+      link=$(echo $hreflink | sed "s/'/\"/g")  
+      
       silentlog "to be visited $link"
       if [[ $(hrefisAbsolute $link) == "yes" ]]; then
       	 LINK=${link##*=}
@@ -29,22 +31,18 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
   	    echo $LINK_WITHOUTQUOTES
 
         if [[ $(isImgLink $LINK_WITHOUTQUOTES) == "no" ]]; then
-        	(
+
+        	echo "$(isImgLink $LINK_WITHOUTQUOTES) : $LINK_WITHOUTQUOTES"
+        	
         		linkNavigateandFindImageLinks.sh $LINK_WITHOUTQUOTES
-        	)
+        	
         else
-        	(
+        	    echo "go for $LINK_WITHOUTQUOTES"
+        	
         		linkdownload.sh $LINK_WITHOUTQUOTES --destination-dir="$WORKINGDIR/img"
-        	)
+        	
         fi
 
-  	    
-  	     
-  
-      #elif [[ condition ]]; then
-
-      # elif [[ condition ]]; then
-  
       else
   	     PART_LINK=${link##*=}
   	     PART_LINK_WITHOUTQUOTES=$(getStringinBetweenDoubleQuotes $PART_LINK)
@@ -52,13 +50,16 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
   	     echo $FINAL_LINK
 
          if [[ $(isImgLink $FINAL_LINK) == "no" ]]; then
-        	(
+
+         	    echo "$(isImgLink $FINAL_LINK) : $FINAL_LINK"
+        	
         		linkNavigateandFindImageLinks.sh $FINAL_LINK
-        	)
+        	
          else
-         	(
+         	echo "go for $FINAL_LINK"
+         	
         	linkdownload.sh $FINAL_LINK --destination-dir="$WORKINGDIR/img"
-        	)
+        	
          fi
 
   	     

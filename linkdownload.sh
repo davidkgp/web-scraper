@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 source ./util/util.sh
 IMG_LINK=$1
+MIN_FILE_SIZE_IN_BYTES=100000
 
 #if file size is specified or else go for default size
 
@@ -31,6 +32,9 @@ FILE_NAME_SAVED=${IMG_LINK##*/}
 
 filterFileTypes $IMG_LINK
 checkLastCommadExecuteAndExit "Cannot download $IMG_LINK"
+
+isImgBelowMinimumLength $IMG_LINK
+checkLastCommadExecuteAndExit "Cannot download $IMG_LINK as its too small"
 
 $(curl -o "$DESTINATION_DIR/$FILE_NAME_SAVED" --max-filesize $MAX_FILE_SIZE_IN_BYTES $IMG_LINK) 
 checkLastCommadExecuteAndExit "Download failed" #> "$DESTINATION_DIR/$FILE_NAME_SAVED"
