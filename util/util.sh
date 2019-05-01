@@ -117,14 +117,22 @@ isImgLink(){
 	local val=$((${#URL}-1))
 	local last_char=${URL:$val:1}
 	# dont download if url ends with /
+
 	if [[ "$last_char" == '/' ]]; then
 		echo "no"
 	else
-		if [[ $IMG_FILE_TYPE != *"${URL##*/}"* ]]; then
-			echo "no"
-		elif [[ $IMG_FILE_TYPE != *"${URL##*.}"* ]]; then
-			echo "no"
-		fi
+
+		LAST_FILE_NAME="${URL##*/}"
+
+		if [[ $LAST_FILE_NAME != *"."* ]]; then
+             echo "no"
+        else
+        	if [[ $IMG_FILE_TYPE != *"${URL##*.}"* ]]; then
+			   echo "no"
+		    fi
+
+        fi
+
 	fi
 
 }

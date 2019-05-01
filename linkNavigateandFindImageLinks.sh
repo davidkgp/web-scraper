@@ -28,16 +28,17 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
       if [[ $(hrefisAbsolute $link) == "yes" ]]; then
       	 LINK=${link##*=}
   	     LINK_WITHOUTQUOTES=$(getStringinBetweenDoubleQuotes $LINK)
-  	    echo $LINK_WITHOUTQUOTES
+  	    
+
 
         if [[ $(isImgLink $LINK_WITHOUTQUOTES) == "no" ]]; then
 
-        	echo "$(isImgLink $LINK_WITHOUTQUOTES) : $LINK_WITHOUTQUOTES"
+        	#echo "$(isImgLink $LINK_WITHOUTQUOTES) : $LINK_WITHOUTQUOTES"
         	
         		linkNavigateandFindImageLinks.sh $LINK_WITHOUTQUOTES
         	
         else
-        	    echo "go for $LINK_WITHOUTQUOTES"
+        	  silentlog "Image download $LINK_WITHOUTQUOTES"
         	
         		linkdownload.sh $LINK_WITHOUTQUOTES --destination-dir="$WORKINGDIR/img"
         	
@@ -47,18 +48,18 @@ if [[ $(alreadVisited $ROOTLINK) == "no" ]]; then
   	     PART_LINK=${link##*=}
   	     PART_LINK_WITHOUTQUOTES=$(getStringinBetweenDoubleQuotes $PART_LINK)
   	     FINAL_LINK=$DOMAIN_URL$PART_LINK_WITHOUTQUOTES
-  	     echo $FINAL_LINK
+  	     #echo $FINAL_LINK
 
          if [[ $(isImgLink $FINAL_LINK) == "no" ]]; then
 
-         	    echo "$(isImgLink $FINAL_LINK) : $FINAL_LINK"
+         	    #echo "$(isImgLink $FINAL_LINK) : $FINAL_LINK"
         	
-        		linkNavigateandFindImageLinks.sh $FINAL_LINK
+        		 linkNavigateandFindImageLinks.sh $FINAL_LINK
         	
          else
-         	echo "go for $FINAL_LINK"
+         	silentlog "Image download $FINAL_LINK"
          	
-        	linkdownload.sh $FINAL_LINK --destination-dir="$WORKINGDIR/img"
+        	linkdownload.sh $FINAL_LINK --destination-dir="$WORKINGDIR/img" &
         	
          fi
 

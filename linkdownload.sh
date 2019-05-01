@@ -30,13 +30,14 @@ fi
 # get the name of the file after the last / in url
 FILE_NAME_SAVED=${IMG_LINK##*/}
 
+
+
 filterFileTypes $IMG_LINK
 checkLastCommadExecuteAndExit "Cannot download $IMG_LINK"
 
 isImgBelowMinimumLength $IMG_LINK
 checkLastCommadExecuteAndExit "Cannot download $IMG_LINK as its too small"
-
+addToVisited $IMG_LINK
 $(curl -o "$DESTINATION_DIR/$FILE_NAME_SAVED" --max-filesize $MAX_FILE_SIZE_IN_BYTES $IMG_LINK) 
 checkLastCommadExecuteAndExit "Download failed" #> "$DESTINATION_DIR/$FILE_NAME_SAVED"
-addToVisited $IMG_LINK
 sleep 5
